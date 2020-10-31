@@ -1,9 +1,9 @@
 package main
 
 import (
+	"github.com/kit/cmd/common"
+	"github.com/kit/cmd/eth"
 	"github.com/spf13/cobra"
-	"github.com/tools/cmd/common"
-	"github.com/tools/cmd/eth"
 )
 
 var rootCmd = &cobra.Command{

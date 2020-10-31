@@ -1,4 +1,4 @@
-module github.com/tools
+module github.com/kit
 
 go 1.14
 
