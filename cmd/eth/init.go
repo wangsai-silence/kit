@@ -11,6 +11,8 @@ var EthCmd = &cobra.Command{
 
 func init() {
 	rpcCmd.PersistentFlags().StringP("host", "o", infuraHost, "set host name")
+	rpcCmd.AddCommand(blockHeightCmd)
+	rpcCmd.AddCommand(txCmd)
 
 	EthCmd.AddCommand(decodeCmd)
 	EthCmd.AddCommand(rpcCmd)

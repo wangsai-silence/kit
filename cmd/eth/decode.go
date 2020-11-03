@@ -17,12 +17,6 @@ var decodeCmd = &cobra.Command{
 	RunE:  decode,
 }
 
-type Wrapper struct {
-	Origin  *types.Transaction `json:"origin"`
-	From    string             `json:"from"`
-	ChainId int64              `json:"chainId"`
-}
-
 func decode(cmd *cobra.Command, args []string) (err error) {
 	if len(args) == 0 {
 		err = errors.New("need one argument")
@@ -40,15 +34,9 @@ func decode(cmd *cobra.Command, args []string) (err error) {
 		return
 	}
 
-	sender, err := types.Sender(types.NewEIP155Signer(tx.ChainId()), tx)
+	wrapper, err := WrapTransaction(tx)
 	if err != nil {
 		return
-	}
-
-	wrapper := &Wrapper{
-		Origin:  tx,
-		From:    sender.String(),
-		ChainId: tx.ChainId().Int64(),
 	}
 
 	data, err := json.MarshalIndent(wrapper, "", "    ")
