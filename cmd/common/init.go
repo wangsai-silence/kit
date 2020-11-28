@@ -6,6 +6,8 @@ var CommonCmds = []*cobra.Command{
 	hexCmd,
 	unhexCmd,
 	unixCmd,
+	upperCmd,
+	lowerCmd,
 }
 
 func init() {
