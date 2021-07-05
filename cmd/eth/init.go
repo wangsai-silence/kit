@@ -16,4 +16,7 @@ func init() {
 
 	EthCmd.AddCommand(decodeCmd)
 	EthCmd.AddCommand(rpcCmd)
+
+	EthCmd.AddCommand(toWeiCmd)
+	EthCmd.AddCommand(toEtherCmd)
 }
