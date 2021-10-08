@@ -67,7 +67,8 @@ func toEther(cmd *cobra.Command, args []string) (err error) {
 		return
 	}
 
-	fmt.Println(big.NewFloat(0).Quo(big.NewFloat(float64(num)), big.NewFloat(0).SetInt(big.NewInt(0).Exp(big.NewInt(10), big.NewInt(int64(18-exp)), nil))).String())
+	res := big.NewFloat(0).Quo(big.NewFloat(float64(num)), big.NewFloat(0).SetInt(big.NewInt(0).Exp(big.NewInt(10), big.NewInt(int64(18-exp)), nil)))
+	fmt.Println(res.Text('f', -1))
 
 	return
 }
