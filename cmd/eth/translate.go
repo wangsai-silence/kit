@@ -2,21 +2,19 @@ package eth
 
 import (
 	"fmt"
-	"math/big"
-	"strconv"
-
 	"github.com/spf13/cobra"
+	"math/big"
 )
 
 var toWeiCmd = &cobra.Command{
 	Use:   "towei",
-	Short: "ether to wei",
+	Short: "ether to wei. example: kit eth towei 1 gwei",
 	RunE:  toWei,
 }
 
 var toEtherCmd = &cobra.Command{
 	Use:   "toether",
-	Short: "wei to ether",
+	Short: "wei to ether. example kit eth toether 10 gwei",
 	RunE:  toEther,
 }
 
@@ -29,8 +27,8 @@ var unitMap = map[string]uint{
 }
 
 func toWei(cmd *cobra.Command, args []string) (err error) {
-	num, err := strconv.Atoi(args[0])
-	if err != nil {
+	num, ok := big.NewInt(0).SetString(args[0], 10)
+	if !ok {
 		return
 	}
 
@@ -41,18 +39,18 @@ func toWei(cmd *cobra.Command, args []string) (err error) {
 
 	exp, exist := unitMap[unit]
 	if !exist {
-		err = fmt.Errorf("Unknown unit:%s", unit)
+		err = fmt.Errorf("unknown unit:%v", unit)
 		return
 	}
 
-	fmt.Println(big.NewInt(0).Mul(big.NewInt(int64(num)), big.NewInt(0).Exp(big.NewInt(10), big.NewInt(int64(exp)), nil)).String())
+	fmt.Println(big.NewInt(0).Mul(num, big.NewInt(0).Exp(big.NewInt(10), big.NewInt(int64(exp)), nil)).String())
 
 	return
 }
 
 func toEther(cmd *cobra.Command, args []string) (err error) {
-	num, err := strconv.Atoi(args[0])
-	if err != nil {
+	num, ok := big.NewFloat(0).SetString(args[0])
+	if !ok {
 		return
 	}
 
@@ -63,11 +61,11 @@ func toEther(cmd *cobra.Command, args []string) (err error) {
 
 	exp, exist := unitMap[unit]
 	if !exist {
-		err = fmt.Errorf("Unknown unit:%s", unit)
+		err = fmt.Errorf("unknown unit:%v", unit)
 		return
 	}
 
-	res := big.NewFloat(0).Quo(big.NewFloat(float64(num)), big.NewFloat(0).SetInt(big.NewInt(0).Exp(big.NewInt(10), big.NewInt(int64(18-exp)), nil)))
+	res := big.NewFloat(0).Quo(num, big.NewFloat(0).SetInt(big.NewInt(0).Exp(big.NewInt(10), big.NewInt(int64(18-exp)), nil)))
 	fmt.Println(res.Text('f', -1))
 
 	return
