@@ -19,4 +19,5 @@ func init() {
 
 	EthCmd.AddCommand(toWeiCmd)
 	EthCmd.AddCommand(toEtherCmd)
+	EthCmd.AddCommand(toCmd)
 }

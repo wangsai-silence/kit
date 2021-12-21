@@ -18,12 +18,57 @@ var toEtherCmd = &cobra.Command{
 	RunE:  toEther,
 }
 
+var toCmd = &cobra.Command{
+	Use:   "to",
+	Short: "translate. example kit eth to gwei 10 wei",
+	RunE:  to,
+}
+
 var unitMap = map[string]uint{
 	"ether": 18,
 	"gwei":  9,
 	"mwei":  6,
 	"kwei":  3,
 	"wei":   0,
+}
+
+func to(cmd *cobra.Command, args []string) (err error) {
+	target := args[0]
+
+	unit := "ether"
+	if len(args) > 2 {
+		unit = args[2]
+	}
+
+	expTowei, exist := unitMap[unit]
+	if !exist {
+		err = fmt.Errorf("unknown unit:%v", unit)
+		return
+	}
+
+	expToTarget, exist := unitMap[target]
+	if !exist {
+		err = fmt.Errorf("unknown unit:%v", target)
+		return
+	}
+
+	if expTowei >= expToTarget {
+		num, ok := big.NewInt(0).SetString(args[1], 10)
+		if !ok {
+			return
+		}
+		res := big.NewInt(0).Mul(num, big.NewInt(0).Exp(big.NewInt(10), big.NewInt(int64(expTowei-expToTarget)), nil))
+		fmt.Println(res.String())
+	} else {
+		num, ok := big.NewFloat(0).SetString(args[1])
+		if !ok {
+			return
+		}
+		res := big.NewFloat(0).Quo(num, big.NewFloat(0).SetInt(big.NewInt(0).Exp(big.NewInt(10), big.NewInt(int64(expToTarget-expTowei)), nil)))
+		fmt.Println(res.Text('f', -1))
+	}
+
+	return
 }
 
 func toWei(cmd *cobra.Command, args []string) (err error) {
