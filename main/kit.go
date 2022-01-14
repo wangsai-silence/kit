@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/kit/cmd/common"
 	"github.com/kit/cmd/eth"
+	"github.com/kit/cmd/query"
 	"github.com/spf13/cobra"
 )
 
@@ -17,6 +18,7 @@ func main() {
 		rootCmd.AddCommand((cmd))
 	}
 	rootCmd.AddCommand(eth.EthCmd)
+	rootCmd.AddCommand(query.QueryCmd)
 
 	rootCmd.Execute()
 }
