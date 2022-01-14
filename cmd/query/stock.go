@@ -1,17 +1,19 @@
 package query
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 	"net/http"
+	"strconv"
+	"strings"
 
+	"github.com/djimenez/iconv-go"
 	"github.com/spf13/cobra"
 )
 
 var stock = &cobra.Command{
 	Use:   "stock",
-	Short: "stock price for shanghai/shenzhen a share market. ex: stock 000001(default)",
+	Short: "stock price for shanghai/shenzhen a share market. ex: stock sh000001(default)",
 	RunE:  stockPrice,
 }
 
@@ -22,13 +24,13 @@ type StockResponse struct {
 }
 
 func stockPrice(cmd *cobra.Command, args []string) (err error) {
-	code := "000001"
+	code := "sh000001"
 
 	if len(args) > 0 {
 		code = args[0]
 	}
 
-	url := fmt.Sprintf("http://yunhq.sse.com.cn:32041/v1/sh1/snap/%v?select=name,prev_close,last,chg_rate", code)
+	url := fmt.Sprintf("http://hq.sinajs.cn/list=%s", code)
 	resp, err := http.DefaultClient.Get(url)
 	if err != nil {
 		return
@@ -39,17 +41,35 @@ func stockPrice(cmd *cobra.Command, args []string) (err error) {
 		return
 	}
 
-	res := &StockResponse{}
-	err = json.Unmarshal(bData, &res)
+	sp := strings.Split(string(bData), "\"")
+	if len(sp) < 3 {
+		return fmt.Errorf("unexpect response:%v", string(bData))
+	}
+
+	datas := strings.Split(sp[1], ",")
+	if len(datas) < 4 {
+		return fmt.Errorf("unexpect response:%v", string(bData))
+	}
+
+	name, err := iconv.ConvertString(datas[0], "GBK", "utf-8")
+	if err != nil {
+		return
+	}
+	prev, err := strconv.ParseFloat(datas[2], 64)
+	if err != nil {
+		return
+	}
+	latest, err := strconv.ParseFloat(datas[3], 64)
 	if err != nil {
 		return
 	}
 
 	fmt.Println(fmt.Sprintf(`
+	name	  : %v
 	prev close: %v
 	latest    : %v
-	rate      : %v %%
-	`, res.Snap[1], res.Snap[2], res.Snap[3]))
+	rate      : %.2f %%
+	`, name, prev, latest, (latest-prev)*100/prev))
 
 	return
 }
