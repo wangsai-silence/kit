@@ -30,7 +30,7 @@ func stockPrice(cmd *cobra.Command, args []string) (err error) {
 		code = args[0]
 	}
 
-	url := fmt.Sprintf("http://hq.sinajs.cn/list=%s", code)
+	url := fmt.Sprintf("https://qt.gtimg.cn/q=%s", code)
 	resp, err := http.DefaultClient.Get(url)
 	if err != nil {
 		return
@@ -41,21 +41,21 @@ func stockPrice(cmd *cobra.Command, args []string) (err error) {
 		return
 	}
 
-	sp := strings.Split(string(bData), "\"")
-	if len(sp) < 3 {
+	datas := strings.Split(string(bData), "~")
+	if len(datas) < 3 {
 		return fmt.Errorf("unexpect response:%v", string(bData))
 	}
+	//
+	//datas := strings.Split(sp[1], ",")
+	//if len(datas) < 4 {
+	//	return fmt.Errorf("unexpect response:%v", string(bData))
+	//}
 
-	datas := strings.Split(sp[1], ",")
-	if len(datas) < 4 {
-		return fmt.Errorf("unexpect response:%v", string(bData))
-	}
-
-	name, err := iconv.ConvertString(datas[0], "GBK", "utf-8")
+	name, err := iconv.ConvertString(datas[1], "GBK", "utf-8")
 	if err != nil {
 		return
 	}
-	prev, err := strconv.ParseFloat(datas[2], 64)
+	prev, err := strconv.ParseFloat(datas[4], 64)
 	if err != nil {
 		return
 	}
