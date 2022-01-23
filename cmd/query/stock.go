@@ -42,7 +42,7 @@ func stockPrice(cmd *cobra.Command, args []string) (err error) {
 	}
 
 	datas := strings.Split(string(bData), "~")
-	if len(datas) < 3 {
+	if len(datas) < 4 {
 		return fmt.Errorf("unexpect response:%v", string(bData))
 	}
 	//
