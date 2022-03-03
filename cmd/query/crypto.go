@@ -62,7 +62,7 @@ func formatSymbol(symbol string, exchange string) (formatSymbol string, err erro
 		return
 	}
 
-	formatSymbol = fmt.Sprintf(symbolStyle.format, strings.TrimRight(symbol, baseToken), baseToken)
+	formatSymbol = fmt.Sprintf(symbolStyle.format, strings.TrimSuffix(symbol, baseToken), baseToken)
 	if symbolStyle.uppercase {
 		formatSymbol = strings.ToUpper(formatSymbol)
 	}
