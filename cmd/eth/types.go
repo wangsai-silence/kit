@@ -13,26 +13,34 @@ type TxWrapper struct {
 }
 
 func WrapTransaction(tx *types.Transaction) (wrapper *TxWrapper, err error) {
-	var signer types.Signer
-	if tx.Protected() {
-		signer = types.NewEIP155Signer(tx.ChainId())
-	} else {
-		signer = &types.HomesteadSigner{}
+	signers := []types.Signer{
+		types.NewLondonSigner(tx.ChainId()),
+		types.NewEIP2930Signer(tx.ChainId()),
+		types.NewEIP155Signer(tx.ChainId()),
+		types.HomesteadSigner{},
+		types.FrontierSigner{},
 	}
 
-	sender, err := types.Sender(signer, tx)
-	if err != nil {
-		return
+	for _, signer := range signers {
+		sender, err1 := types.Sender(signer, tx)
+		if err1 != nil {
+			err = err1
+			continue
+		}
+
+		wrapper = &TxWrapper{
+			Origin:   tx,
+			ChainId:  tx.ChainId().Int64(),
+			From:     sender.String(),
+			Amount:   tx.Value().String(),
+			Gas:      tx.Gas(),
+			GasPrice: tx.GasPrice().String(),
+			Nonce:    tx.Nonce(),
+		}
 	}
 
-	wrapper = &TxWrapper{
-		Origin:   tx,
-		ChainId:  tx.ChainId().Int64(),
-		From:     sender.String(),
-		Amount:   tx.Value().String(),
-		Gas:      tx.Gas(),
-		GasPrice: tx.GasPrice().String(),
-		Nonce:    tx.Nonce(),
+	if wrapper != nil {
+		err = nil
 	}
 
 	return

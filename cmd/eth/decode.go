@@ -7,7 +7,6 @@ import (
 
 	"github.com/ethereum/go-ethereum/common/hexutil"
 	"github.com/ethereum/go-ethereum/core/types"
-	"github.com/ethereum/go-ethereum/rlp"
 	"github.com/spf13/cobra"
 )
 
@@ -29,7 +28,7 @@ func decode(cmd *cobra.Command, args []string) (err error) {
 	}
 
 	tx := new(types.Transaction)
-	err = rlp.DecodeBytes(bytes, tx)
+	err = tx.UnmarshalBinary(bytes)
 	if err != nil {
 		return
 	}
