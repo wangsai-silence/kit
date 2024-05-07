@@ -85,7 +85,7 @@ func price(cmd *cobra.Command, args []string) (err error) {
 	if err != nil {
 		return
 	}
-	url := fmt.Sprintf("https://addons.wangsai.site/getPrice?exchange=%s&symbol=%s", exchange, symbol)
+	url := fmt.Sprintf("https://addons.wangsai.cloud/getPrice?exchange=%s&symbol=%s", exchange, symbol)
 	resp, err := http.DefaultClient.Get(url)
 	if err != nil {
 		return
