@@ -9,15 +9,26 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var unhexCmd = &cobra.Command{
-	Use:   "unhex",
-	Short: "unhex int from 16 to 10",
-	RunE:  unhex,
+func init() {
+	hexCmd.AddCommand(encodecmd, decodeCmd)
 }
+
 var hexCmd = &cobra.Command{
 	Use:   "hex",
-	Short: "hex int from 10 to 16",
-	RunE:  hex,
+	Short: "convert integer between 10 and 16",
+}
+
+var decodeCmd = &cobra.Command{
+	Use:     "decode",
+	Aliases: []string{"d", "de"},
+	Short:   "unhex int from 16 to 10",
+	RunE:    unhex,
+}
+var encodecmd = &cobra.Command{
+	Use:     "encode",
+	Aliases: []string{"e", "en"},
+	Short:   "hex int from 10 to 16",
+	RunE:    hex,
 }
 
 func unhex(cmd *cobra.Command, args []string) (err error) {

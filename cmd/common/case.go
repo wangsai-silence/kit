@@ -9,15 +9,17 @@ import (
 )
 
 var upperCmd = &cobra.Command{
-	Use:   "upper",
-	Short: "convert to upper case",
-	RunE:  upper,
+	Use:     "upper",
+	Aliases: []string{"up"},
+	Short:   "convert to upper case",
+	RunE:    upper,
 }
 
 var lowerCmd = &cobra.Command{
-	Use:   "lower",
-	Short: "convert to lower case",
-	RunE:  lower,
+	Use:     "lower",
+	Aliases: []string{"low"},
+	Short:   "convert to lower case",
+	RunE:    lower,
 }
 
 func upper(cmd *cobra.Command, args []string) (err error) {

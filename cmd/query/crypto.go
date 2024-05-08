@@ -11,9 +11,10 @@ import (
 )
 
 var crypto = &cobra.Command{
-	Use:   "crypto",
-	Short: "crypto price from exchanges. ex: crypto btcusdt(default) huobi(default)",
-	RunE:  price,
+	Use:     "crypto",
+	Aliases: []string{"c"},
+	Short:   "crypto price from exchanges. ex: crypto btcusdt(default) huobi(default)",
+	RunE:    price,
 }
 
 type style struct {
@@ -34,8 +35,8 @@ var symbolStyles = map[string]*style{
 		format:    "%s-%s",
 		uppercase: true,
 	},
-	"ftx": &style{
-		format:    "%s/%s",
+	"kucoin": &style{
+		format:    "%s-%s",
 		uppercase: true,
 	},
 }

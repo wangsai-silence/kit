@@ -12,9 +12,10 @@ import (
 )
 
 var stock = &cobra.Command{
-	Use:   "stock",
-	Short: "stock price for shanghai/shenzhen a share market. ex: stock sh000001(default)",
-	RunE:  stockPrice,
+	Use:     "stock",
+	Aliases: []string{"s", "st"},
+	Short:   "stock price for shanghai/shenzhen a share market. ex: stock sh000001(default)",
+	RunE:    stockPrice,
 }
 
 type StockResponse struct {

@@ -13,12 +13,15 @@ func init() {
 }
 
 var b64Cmd = &cobra.Command{
-	Use: "b64",
+	Use:     "base64",
+	Aliases: []string{"b64"},
+	Short:   "convert string between utf8 and base64",
 }
 var b64DecodeCmd = &cobra.Command{
-	Use:   "decode",
-	Short: "decode base64 data to string",
-	RunE:  decode,
+	Use:     "decode",
+	Aliases: []string{"d", "de"},
+	Short:   "decode base64 data to string",
+	RunE:    decode,
 }
 
 func decode(cmd *cobra.Command, args []string) (err error) {

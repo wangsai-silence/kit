@@ -14,11 +14,8 @@ var rootCmd = &cobra.Command{
 }
 
 func main() {
-	for _, cmd := range common.CommonCmds {
-		rootCmd.AddCommand((cmd))
-	}
-	rootCmd.AddCommand(eth.EthCmd)
-	rootCmd.AddCommand(query.QueryCmd)
+	rootCmd.AddCommand(common.CommonCmds...)
+	rootCmd.AddCommand(eth.EthCmd, query.QueryCmd)
 
 	rootCmd.Execute()
 }
